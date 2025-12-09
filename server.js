@@ -60,7 +60,7 @@ app.get("/api/print-data", async (req, res) => {
         maVt: item.fields["Mã vật tư"],
         tenVt: item.fields["Tên vật tư, thiết bị"],
         dvt: item.fields["Đơn vị tính"],
-        quyCach: item.fields["Quy cách"],
+        quyCach: item.fields["Quy cách, Mã hiệu"],
         nhanHieu: item.fields["Nhãn hiệu"],
         slDeNghi: item.fields["SL đề nghị đợt này"],
         ghiChu: item.fields["Ghi chú"],
