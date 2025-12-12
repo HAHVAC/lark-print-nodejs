@@ -6,17 +6,16 @@
     <title>Phiếu Xuất Kho - Trường An</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <style>
-      /* Cấu hình chung cho trang */
+      /* --- CẤU HÌNH CHUNG --- */
       body {
         font-family: "Times New Roman", Times, serif;
         font-size: 13pt;
-        line-height: 1.4;
         margin: 0;
         padding: 20px;
-        background: #525659; /* Màu nền xám giống trình xem PDF */
+        background-color: #525659; /* Màu nền xám để nổi bật khổ giấy */
       }
 
-      /* Khung giấy A4 */
+      /* --- KHỔ GIẤY A4 --- */
       .page {
         background: white;
         width: 210mm;
@@ -24,21 +23,19 @@
         padding: 15mm 20mm;
         margin: 0 auto;
         box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-        position: relative;
         box-sizing: border-box;
+        position: relative;
       }
 
-      /* Header: Logo và Tên công ty */
+      /* --- HEADER --- */
       .header {
         display: flex;
         align-items: flex-start;
         margin-bottom: 20px;
-        border-bottom: 2px solid #000;
-        padding-bottom: 15px;
       }
       .logo {
         width: 120px;
-        flex-shrink: 0;
+        margin-right: 20px;
       }
       .logo img {
         width: 100%;
@@ -48,35 +45,32 @@
       .company-info {
         text-align: center;
         flex-grow: 1;
-        padding-right: 0;
       }
       .company-name {
         font-weight: bold;
         font-size: 14pt;
         text-transform: uppercase;
         margin-bottom: 5px;
-        color: #b72025; /* Màu đỏ thương hiệu nếu cần */
       }
       .stars {
-        margin: 5px 0;
         color: #f1c40f;
-        font-size: 16pt;
+        margin: 5px 0;
       }
       .form-title {
         font-size: 20pt;
         font-weight: bold;
-        margin-top: 10px;
+        margin-top: 15px;
         text-transform: uppercase;
       }
 
-      /* Phần thông tin chung (Số phiếu, ngày tháng...) */
+      /* --- THÔNG TIN PHIẾU --- */
       .info-section {
-        margin-bottom: 20px;
+        margin-bottom: 15px;
+        line-height: 1.5;
       }
       .info-row {
         display: flex;
         justify-content: space-between;
-        margin-bottom: 8px;
       }
       .info-left {
         width: 65%;
@@ -85,50 +79,43 @@
         width: 35%;
         text-align: right;
       }
-      .info-full {
-        width: 100%;
-        margin-bottom: 8px;
-      }
-
       .label {
         font-weight: bold;
       }
 
-      /* Bảng dữ liệu */
+      /* --- BẢNG VẬT TƯ --- */
       table {
         width: 100%;
         border-collapse: collapse;
         margin-top: 10px;
-        font-size: 12pt;
+        font-size: 11pt;
       }
       th,
       td {
         border: 1px solid black;
-        padding: 6px;
+        padding: 5px;
         text-align: center;
         vertical-align: middle;
       }
       th {
-        background-color: #e6f3ff;
+        background-color: #dbeeff;
         font-weight: bold;
         height: 40px;
       }
-
-      /* Căn chỉnh cột trong bảng */
-      .col-left {
+      .text-left {
         text-align: left;
       }
       .col-wrap {
         white-space: pre-wrap;
-      } /* Để xuống dòng nếu nội dung dài */
+      } /* Tự xuống dòng nếu chữ dài */
 
-      /* Phần chữ ký */
+      /* --- CHỮ KÝ --- */
       .signature-section {
         display: flex;
         justify-content: space-between;
-        margin-top: 40px;
+        margin-top: 30px;
         text-align: center;
-        page-break-inside: avoid;
+        page-break-inside: avoid; /* Tránh bị ngắt trang giữa chừng */
       }
       .sig-box {
         width: 24%;
@@ -141,46 +128,11 @@
       .sig-note {
         font-style: italic;
         font-size: 10pt;
+        margin-top: 5px;
         margin-bottom: 80px;
       }
-      .sig-name {
-        font-weight: bold;
-        margin-top: 10px;
-      }
 
-      /* Nút bấm điều khiển (Sẽ ẩn khi in) */
-      .controls {
-        text-align: center;
-        margin-bottom: 20px;
-        position: sticky;
-        top: 10px;
-        z-index: 100;
-      }
-      .btn {
-        padding: 10px 25px;
-        font-size: 16px;
-        cursor: pointer;
-        color: white;
-        border: none;
-        border-radius: 5px;
-        margin: 0 10px;
-        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-        font-weight: bold;
-      }
-      .btn-print {
-        background: #007bff;
-      }
-      .btn-print:hover {
-        background: #0056b3;
-      }
-      .btn-pdf {
-        background: #dc3545;
-      }
-      .btn-pdf:hover {
-        background: #a71d2a;
-      }
-
-      /* Màn hình loading */
+      /* --- LOADING SPINNER --- */
       #loading {
         position: fixed;
         top: 0;
@@ -188,11 +140,11 @@
         width: 100%;
         height: 100%;
         background: rgba(255, 255, 255, 0.95);
+        z-index: 9999;
         display: flex;
         flex-direction: column;
         justify-content: center;
         align-items: center;
-        z-index: 9999;
       }
       .spinner {
         border: 5px solid #f3f3f3;
@@ -201,7 +153,6 @@
         width: 50px;
         height: 50px;
         animation: spin 1s linear infinite;
-        margin-bottom: 15px;
       }
       @keyframes spin {
         0% {
@@ -215,24 +166,47 @@
         display: none !important;
       }
 
-      /* CẤU HÌNH KHI IN (QUAN TRỌNG) */
+      /* --- NÚT BẤM --- */
+      .controls {
+        text-align: center;
+        margin-bottom: 20px;
+        position: sticky;
+        top: 10px;
+        z-index: 100;
+      }
+      .btn {
+        padding: 10px 20px;
+        font-size: 16px;
+        cursor: pointer;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        margin: 0 5px;
+      }
+      .btn-print {
+        background: #007bff;
+      }
+      .btn-pdf {
+        background: #dc3545;
+      }
+
+      /* --- CHẾ ĐỘ IN (Khi bấm Ctrl+P) --- */
       @media print {
         body {
           background: white;
           padding: 0;
           margin: 0;
         }
-        .controls,
-        #loading {
-          display: none !important;
-        }
         .page {
           box-shadow: none;
           margin: 0;
           width: 100%;
-          max-width: 100%;
-          padding: 10mm 15mm;
           border: none;
+          padding: 10mm 10mm;
+        }
+        .controls,
+        #loading {
+          display: none !important;
         }
         @page {
           size: A4;
@@ -244,7 +218,12 @@
   <body>
     <div id="loading">
       <div class="spinner"></div>
-      <div id="loading-text">Đang kết nối đến hệ thống dữ liệu...</div>
+      <p
+        id="loading-text"
+        style="margin-top: 15px; font-weight: bold; color: #555"
+      >
+        Đang tải dữ liệu phiếu...
+      </p>
     </div>
 
     <div class="controls">
@@ -257,10 +236,7 @@
     <div class="page" id="printable-area">
       <div class="header">
         <div class="logo">
-          <img
-            src="https://via.placeholder.com/150x80?text=LOGO+TRUONG+AN"
-            alt="Logo Truong An"
-          />
+          <img src="https://via.placeholder.com/150x80?text=LOGO" alt="Logo" />
         </div>
         <div class="company-info">
           <div class="company-name">
@@ -283,21 +259,30 @@
         </div>
         <div class="info-row">
           <div class="info-left">
-            <span class="label">Nhà xưởng:</span>
-            <span id="nha-xuong">...</span>
+            <span class="label">Hạng mục:</span> <span id="hang-muc">...</span>
           </div>
           <div class="info-right">
             <span class="label">Ngày/tháng:</span>
             <span id="ngay-thang">...</span>
           </div>
         </div>
-        <div class="info-full">
-          <span class="label">Tổ đội/Nhà cung cấp:</span>
-          <span id="nha-cung-cap">...</span>
+        <div class="info-row">
+          <div class="info-left">
+            <span class="label">Nhà xưởng:</span>
+            <span id="nha-xuong">...</span>
+          </div>
         </div>
-        <div class="info-full">
-          <span class="label">Diễn giải/Nội dung xuất:</span>
-          <span id="dien-giai">...</span>
+        <div class="info-row">
+          <div class="info-left">
+            <span class="label">Tổ đội/NCC:</span>
+            <span id="nha-cung-cap">...</span>
+          </div>
+        </div>
+        <div class="info-row">
+          <div class="info-left">
+            <span class="label">Diễn giải:</span>
+            <span id="dien-giai">...</span>
+          </div>
         </div>
       </div>
 
@@ -305,14 +290,14 @@
         <thead>
           <tr>
             <th style="width: 5%">Stt</th>
-            <th style="width: 12%">Mã vật tư</th>
-            <th style="width: 30%">Tên vật tư, thiết bị</th>
+            <th style="width: 10%">Mã VT</th>
+            <th style="width: 25%">Tên vật tư, thiết bị</th>
             <th style="width: 8%">ĐVT</th>
-            <th style="width: 15%">Quy cách, Mã hiệu</th>
+            <th style="width: 15%">Quy cách,<br />Mã hiệu</th>
             <th style="width: 10%">Nhãn hiệu</th>
             <th style="width: 8%">SL đề nghị</th>
             <th style="width: 8%">Thực xuất</th>
-            <th style="width: 10%">Ghi chú</th>
+            <th style="width: 11%">Ghi chú</th>
           </tr>
         </thead>
         <tbody id="table-body"></tbody>
@@ -339,53 +324,44 @@
     </div>
 
     <script>
-      // CẤU HÌNH API
-      // Vì file HTML này nằm cùng server với Nodejs nên chỉ cần gọi path tương đối
+      // Đường dẫn API (Cùng server nên dùng relative path)
       const API_URL = "/api/print-data";
 
-      // Hàm format ngày tháng (YYYY-MM-DD -> DD/MM/YYYY)
-      function formatDate(dateString) {
-        if (!dateString) return "";
+      // Hàm format ngày tháng
+      function formatDate(dateStr) {
+        if (!dateStr) return "";
         try {
-          // Lark thường trả về timestamp (số milliseconds) hoặc chuỗi
-          const date = new Date(dateString);
-          if (isNaN(date.getTime())) return dateString; // Nếu không parse được thì trả về nguyên gốc
-
-          const day = String(date.getDate()).padStart(2, "0");
-          const month = String(date.getMonth() + 1).padStart(2, "0"); // Tháng bắt đầu từ 0
-          const year = date.getFullYear();
-          return `${day}/${month}/${year}`;
+          const d = new Date(dateStr);
+          if (isNaN(d.getTime())) return dateStr;
+          return `${d.getDate().toString().padStart(2, "0")}/${(
+            d.getMonth() + 1
+          )
+            .toString()
+            .padStart(2, "0")}/${d.getFullYear()}`;
         } catch (e) {
-          return dateString;
+          return dateStr;
         }
       }
 
+      // Hàm chính: Lấy dữ liệu và hiển thị
       async function loadData() {
         const params = new URLSearchParams(window.location.search);
-        const recordId = params.get("id");
-
-        const loadingEl = document.getElementById("loading");
+        const id = params.get("id");
         const loadingText = document.getElementById("loading-text");
 
-        if (!recordId) {
+        if (!id) {
           loadingText.innerText = "Lỗi: Không tìm thấy ID phiếu trên URL!";
           loadingText.style.color = "red";
           return;
         }
 
         try {
-          // Gọi API Node.js
-          const response = await fetch(`${API_URL}?id=${recordId}`);
+          const res = await fetch(`${API_URL}?id=${id}`);
+          if (!res.ok) throw new Error("Không thể kết nối Server");
 
-          if (!response.ok) {
-            throw new Error(`Server Error: ${response.status}`);
-          }
+          const data = await res.json();
 
-          const data = await response.json();
-
-          // --- Đổ dữ liệu vào HTML ---
-
-          // 1. Header
+          // 1. Điền thông tin chung (Header)
           document.getElementById("so-phieu").innerText = data.soPhieu || "";
           document.getElementById("nha-xuong").innerText = data.nhaXuong || "";
           document.getElementById("ngay-thang").innerText = formatDate(
@@ -394,47 +370,43 @@
           document.getElementById("nha-cung-cap").innerText =
             data.nhaCungCap || "";
           document.getElementById("dien-giai").innerText = data.noiDung || "";
+          // Nếu có thêm field 'Hạng mục' trong backend, thêm vào đây, tạm thời để trống hoặc lấy từ nhaXuong
+          // document.getElementById('hang-muc').innerText = data.hangMuc || "";
 
-          // 2. Table Detail
+          // 2. Điền bảng (Table)
           const tbody = document.getElementById("table-body");
-          tbody.innerHTML = ""; // Xóa dữ liệu cũ/demo
+          tbody.innerHTML = ""; // Xóa dữ liệu cũ
 
           if (data.items && data.items.length > 0) {
             data.items.forEach((item, index) => {
               const tr = document.createElement("tr");
-
-              // Xử lý các trường null/undefined
-              const maVt = item.maVt || "";
-              const tenVt = item.tenVt || "";
-              const dvt = item.dvt || "";
-              const quyCach = item.quyCach || "";
-              const nhanHieu = item.nhanHieu || "";
-              const slDeNghi = item.slDeNghi || "";
-              const ghiChu = item.ghiChu || "";
-
               tr.innerHTML = `
                             <td>${index + 1}</td>
-                            <td>${maVt}</td>
-                            <td class="col-left col-wrap"><b>${tenVt}</b></td>
-                            <td>${dvt}</td>
-                            <td class="col-wrap">${quyCach}</td>
-                            <td>${nhanHieu}</td>
-                            <td style="font-weight:bold;">${slDeNghi}</td>
-                            <td></td> <td class="col-wrap">${ghiChu}</td>
+                            <td>${item.maVt || ""}</td>
+                            <td class="text-left col-wrap"><b>${
+                              item.tenVt || ""
+                            }</b></td>
+                            <td>${item.dvt || ""}</td>
+                            <td class="col-wrap">${item.quyCach || ""}</td>
+                            <td>${item.nhanHieu || ""}</td>
+                            <td style="font-weight:bold">${
+                              item.slDeNghi || ""
+                            }</td>
+                            <td></td> <td class="text-left col-wrap">${
+                              item.ghiChu || ""
+                            }</td>
                         `;
               tbody.appendChild(tr);
             });
           } else {
-            // Nếu không có dữ liệu chi tiết
-            tbody.innerHTML =
-              '<tr><td colspan="9">Không có dữ liệu vật tư</td></tr>';
+            tbody.innerHTML = `<tr><td colspan="9">Không có dữ liệu vật tư</td></tr>`;
           }
 
           // Tắt loading
-          loadingEl.classList.add("hidden");
-        } catch (e) {
-          console.error(e);
-          loadingText.innerText = "Có lỗi xảy ra: " + e.message;
+          document.getElementById("loading").classList.add("hidden");
+        } catch (error) {
+          console.error(error);
+          loadingText.innerText = "Có lỗi xảy ra: " + error.message;
           loadingText.style.color = "red";
         }
       }
@@ -442,22 +414,19 @@
       // Hàm xuất PDF
       function exportPDF() {
         const element = document.getElementById("printable-area");
-
-        // Lấy số phiếu để đặt tên file
         const soPhieu =
-          document.getElementById("so-phieu").innerText || "Phieu_Xuat";
+          document.getElementById("so-phieu").innerText || "Phieu";
+
+        // Ẩn nút trước khi chụp
+        document.querySelector(".controls").style.display = "none";
 
         const opt = {
           margin: 0,
-          filename: `Phieu_Xuat_Kho_${soPhieu}.pdf`,
+          filename: `Phieu_Xuat_${soPhieu}.pdf`,
           image: { type: "jpeg", quality: 0.98 },
-          html2canvas: { scale: 2, useCORS: true }, // scale 2 để nét hơn
+          html2canvas: { scale: 2, useCORS: true },
           jsPDF: { unit: "mm", format: "a4", orientation: "portrait" },
         };
-
-        // Ẩn nút trước khi tạo PDF (đề phòng)
-        const controls = document.querySelector(".controls");
-        controls.style.display = "none";
 
         html2pdf()
           .set(opt)
@@ -465,11 +434,11 @@
           .save()
           .then(() => {
             // Hiện lại nút sau khi xong
-            controls.style.display = "block";
+            document.querySelector(".controls").style.display = "block";
           });
       }
 
-      // Chạy hàm khi trang tải xong
+      // Chạy khi tải trang
       window.onload = loadData;
     </script>
   </body>
